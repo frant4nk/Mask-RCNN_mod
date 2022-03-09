@@ -50,7 +50,7 @@ def display_results(image, boxes, masks, class_ids, class_names, scores=None,
         n_instances = boxes.shape[0]
         colors = color_map()
         for k in range(n_instances):
-            color = colors[class_ids[k]].astype(int)
+            color = colors[class_ids[k]].astype(np.uint8)
             clr = (color[0], color[1], color[2])
             if show_bbox:
                 box = boxes[k]
@@ -63,9 +63,9 @@ def display_results(image, boxes, masks, class_ids, class_names, scores=None,
 
             if show_mask:
                 mask = masks[:, :, k]
-                color_mask = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=int)
+                color_mask = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=np.uint8)
                 color_mask[mask] = color
-                image = cv2.addWeighted(color_mask, 0.5, image.astype(int), 1, 0)
+                image = cv2.addWeighted(color_mask, 0.5, image.astype(np.uint8), 1, 0)
 
         if display_img:
             plt.imshow(image)
@@ -157,8 +157,9 @@ else:
         b = time.time()
         print(f'TOTAL INFERENCE TIME: {b - a} ; FPS: {1 / (b - a)}')
 
-        # cv2.imshow('video', img)
-        out.write(img)
+        print(img.shape)
+        cv2.imshow('video', img)
+        # out.write(img)
         if cv2.waitKey(1) == ord('q') & 0xFF:
             break
     out.release()
